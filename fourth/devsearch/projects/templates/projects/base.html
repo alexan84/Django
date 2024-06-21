@@ -1,0 +1,58 @@
+<!-- 8 -->
+<!--9-->
+<!DOCTYPE html>
+<!--16 подключаем папку статик-->
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Favicon                     16 -->
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+  <!-- Icon - font-awesome -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Mumble UI                     17-->
+  <link rel="stylesheet" href="{% static 'uikit/styles/uikit.css' %}" />
+  <!-- Dev Search UI                   18 -->
+  <link rel="stylesheet" href="{% static 'styles/app.css' %}" />
+
+  <title>DevSearch - Connect with Developers!</title>
+</head>
+
+<body>
+
+
+<!--13-->
+{% include 'projects/navbar.html' %}
+<!--10-->
+{% block content %}
+
+{% endblock %}
+
+<!--11-->
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

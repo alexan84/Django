@@ -1,0 +1,961 @@
+устанавливаем pip instal django
+
+переходим https://www.djangoproject.com/download/ и смотрим когда выходят версии проги,стоит обновлятся когда старые версии перестают поддерживаться
+
+так как версияпайчарма бесплатная придется работать в терминале
+
+
+1 Проект - генерация пароля
+
+создаем новый проект first открываем его в пайчарме и открываем терминал там находяться в этой папке cd вводим команду django-admin startproject password_generator_project
+(password_generator_project название проекта)
+создастся новый проект manage.py в нашей папке далее cd pas и tab и подставитсья путь cd .\password_generator_project\
+нажимаем энтер и переходим в папку выше
+
+через папку manage.py запускается сайт
+
+python manage.py runserver - запускаем сервер
+PS C:\first\password_generator_project> python manage.py runserver
+
+вывод инфы такой если все в порядке
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, session
+s.
+Run 'python manage.py migrate' to apply them.
+June 02, 2024 - 19:55:17
+Django version 5.0.6, using settings 'password_generator_project.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+
+****************************************
+
+
+далее нажимаем на порт и открывается готовый сайт
+http://127.0.0.1:8000/
+для замены порта или айпи адреса используем
+python manage.py runserver 4000
+python manage.py runserver 1.2.3.4:4000
+
+сразу же создается автоматически БД
+
+************************************
+
+создаем свое новое приложение внутри нашего проекта
+останавливаем наш сервер в тереминале кликаем в нем мышкой и жмем Ctrl C
+и вводим python manage.py startapp generator
+так выглядит ввод PS C:\first\password_generator_project> python manage.py startapp generator
+появится папка generator
+тоесть у нас два проекта password_generator_project и generator
+каждое приложение нужно регистрировать в файле настроек password_generator_project
+INSTALLED_APPS
+
+в папке generator apps  копируем название класса GeneratorConfig
+и вводим в настройки password_generator_project
+'generator.apps.GeneratorConfig'
+
+запускаем сервер еще раз
+PS C:\first\password_generator_project> python manage.py runserver
+
+
+далее информация о вложенных файлах
+путь указывается в urls.py в папке password_generator_project а сама функция которая будет обрабатывать этот пусть находится generator.views.py(тут создаем функцию home) запрос на сервер
+так же делаем импорт молдулей
+from django.http import HttpResponse
+
+выведем хэлло в сайте
+добавим пусть к нашей функции (в ней вывод хэлло) в password_generator_project .urls.py
+path('', views.home),
+и добавив импорт from generator import views
+и теперь на сайте выводится хэлло
+
+что бы убрать подчеркивание нужно прав кн мыши на password_generator_project внизу маркдиректорияас соурсесрут
+
+все html документы будут относится в папке template
+поэтому создадим структуру
+generator
+    templates
+         generator
+               home.html(тут вручную прописать)
+	      password.html
+
+
+теперь по views.py отрисуем нашу страницу методом render
+return render(request, 'generator/home.html')
+укажем путь к нашей странице на которой наш текст
+
+создадим генератор паролей начнем со страницы html на ней создадим выпадающий список
+
+
+нам нужна вторая страница куда мы будем переходить
+password.html
+укажем путь в urls что бы он отобразился
+путь состоит  из path('password', views.password) c функцией внурти которую создадим скоро
+
+
+сделаем заданное количество символов для пароля
+обрамим генератор пароля тегом Р
+и создадим еще один тег Р и укажем 3 чекбокса в нем и назначим значения этим галочкам name
+
+сформируем создание пароля c выбором количества символов из выпающего списка
+далее добавим возможность выбирать символы верхнего и нижнего регистра
+добавим цифры в пароль
+добавим спецсимволы в пароль
+
+добавим кнопу вернуться на главную после ввода пароля
+
+создадим стили для оформления папку static
+в двух документах укажем путь в кним home.html	и password.html
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+перезапускаем обязательно сервер(несколько раз, толкаем его) и тыкаем по разным страницам что бы стические файлы быстрее подхватились
+
+
+generator
+    templates
+         generator
+               home.html(тут вручную прописать)
+	       password.html
+    static
+	 css
+	    style.css
+
+создадим див контейнер	в кним home.html и password.html
+что писать стили откроем вижуалстудиякод откроем там наш проект  эту папку password_generator_project и найдем стили css
+
+оформи стили на страницах home.html и password.html
+
+нам надо базовый шаблон который будет эти все данные выносить в один общий шаблон
+создадим base.hthl
+возьмем все содержимое с home.html и оставляем только div.container добавляем block content
+в home.html удалим все оставим только форму и заголовок h1,так же подключим generator/base.html вверху страницы и вставим {% block content %}с закрывающим тегом
+
+в  password.html делаем то же самое
+
+generator
+    templates
+         generator
+               home.html(тут вручную прописать)
+	       password.html
+               base.hthl
+    static
+	 css
+	    style.css
+
+
+темсамым у нас теперь одна папка с подключеными стилями css это base.hthl и ее мы подключаем к любому нужному документу
+
+
+2 Проект second
+
+
+PS C:\Django\second>
+
+1 создаем новое приложение в терминале
+django-admin startproject personal_portfolio
+
+
+заходим в приложение
+2 C:\Django\second> cd .\personal_portfolio\
+и создаем по очереди два новых приложения
+3 python manage.py startapp skills (это страница какого то разработчика где сохраним данные в БД)
+4 python manage.py startapp blog
+
+теперь регистрируем оба наших приложения
+5 в personal_portfolio.settings.py
+добавляем следущее из папок skills.apps и blog.apps
+'skills.apps.SkillsConfig',
+'blog.apps.BlogConfig',
+
+
+Начнем с работы БД
+в URL указываются пути к документам
+
+во View находятся функции которые указывают какую страницу HTML мы будем выводить при переходе по какому то пути
+
+в Skills.models будет связь с БД,
+6 создадим класс для работы БД class Skills
+
+у нас названия полей работают как свойства а значение как значения этого свойства
+
+установим модуль в настройках Pillow
+pip install Pillow
+7 после установки модуля запускаем сервер
+PS C:\Django\second\personal_portfolio> python manage.py runserver
+и сделать миграцию что бы из класса преобразуем элементы в таблицу
+остановим сервер и введем ниже по очереди
+
+8 python manage.py makemigrations - создаст документ в \migrations в котором написанно все что написали в классе Skills
+вывод в терминале
+Migrations for 'skills':
+  skills\migrations\0001_initial.py
+    - Create model Skills
+
+9 python manage.py migrate - установятся дополнительные пакеты,все стандартные миграции джанго
+
+10 запустим сервер ,откроем сайт и допишем admin попадем на страницу админа
+11 и теперь создадим данные для супер пользователя,остановив сервер
+
+12 python manage.py createsuperuser
+
+появится Username (leave blank to use 'blend')
+13 нужно придумать название пользователя емаил и пароль потом соглашаемся что пароль слабый
+
+Bypass password validation and create user anyway? [y/N]: y
+Superuser created successfully.
+PS C:\Django\second\personal_portfolio>
+
+14 запускаем сервер,заходим на страницу админ и вводим данные
+
+15 далее в пайчарме зарегистрируем модель в Skills.admin.py обязательно проведя импорт класса скилс
+from .models import Skills
+admin.site.register(Skills)
+после этого появится в админ панеле сайта появится наша модель скилс
+
+16 Далее откроем БД с SQLite и увидим что создались таблицы за счет введеной ранее команды (в sqlite-view-databasec показать базы данных если гулочки нет но не чего не увидим)
+python manage.py migrate
+
+название таблицы состоит из названия приложения и названия класса
+
+17 зайдем с settings.py и сделаем некоторые настройки,создадим константы для медиафайлов и путь к ним
+MEDIA_URL = 'media/'  # путь к медиафайлам которые добавляются в БД
+MEDIA_ROOT = BASE_DIR / 'media'  # BASE_DIR путь к корневому каталогу объявлен вверху файла,он объеденяет пути
+
+18 теперь заполним наши данные на сайте, в папке FW_3 найдем skills.txt
+переносим данные на сайт и картинку C:\Users\blend\Desktop\FW\FW_3\images
+и нажимаем сохранить
+
+19 проверить что в корне проекта создалась папка медиа и в ней хранится изображение
+
+20 далее в urls.py добавим импорты
+from django.conf.urls.static import static
+from django.conf import settings
+21 и добавим urlpatterns что бы при нажатии Currently видеть изображение
+теперь в этом же документе создадим главную страницу
+
+22 но сначало во views.py напишем функцию index которая формирует путь к странице
+
+23 теперь в скилс создадим папку templates в которой будут лежать наши шаблоны.далее еще папку skills и index.html и base
+
+templates
+	skills
+	      index
+	      base
+
+24 в urls добавим путь по которому	будет отображаться функция index
+ from skills import views
+path('gorod/', include('gorod.urls')),
+25 - что бы убрать подчеркивание,правой кнопкой мыши по названию проекта Mark Directory as - Sources Roor - это мы сказали где корневая папка для этого проекта
+path('', views.index, name='index')
+
+26 в base создадим два дива
+<div class="content">
+    <div class="wrap">
+
+27 в index мы должны наследоваться от базового шаблона
+{% extends 'skills/base.html' %}
+и заполняем страницу
+
+как нам вывести информацию из БД,вся наша логика которую мы пишем храниться во views
+туда импортируем
+28 from .models import Skills
+создадим переменную куда будут поступать данные из БД
+
+29 в index пройдемся в цикле по projects  и выведем инфу из БД,то есть все новые страницы будут появлятся на сайте
+<div class="block">
+    {% for project in projects %}
+
+
+добавим новую инфу на сайт в админ панеле
+
+
+далее в skills создадим папку static в этой папке будут хранится статические изображения и css
+
+статическу картинку будем выводить в index и перезапустим сервер,картинка вывелась
+теперь подключим стили css в base
+{% load static %}
+{% static 'css/style.css' %}
+
+в стилях изменим цвет сайта что бы проверить подключились ли стили
+
+откроем вижуа студио код и перенесем туда папку с проектом
+
+на одном примере подключим сторонние шрифты с fonts.google.com
+найдем шрифт Roboto заходим в него и жмем get font - get embedet code - import
+копируем
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+возращаемся в вижуал студио и самой первой строкой подключаем шрифты
+
+далее что бы подключить в любой блок вставляем это
+font-family: "Roboto", sans-serif;
+
+далее напишем стили к нашему контенту и придадим вид сайту
+
+в blog создадим urls.py
+ в персоналпортфолио в urls подключаем
+path('blog/', include('blog.urls')),
+
+в blog.urls.py импортируем
+from django.urls import path
+from  . import views
+
+и пропишем пути
+path('', views.blogs, name="blogs")
+
+далее создадим функцию blogs во views
+
+далее в приложении blog создадим папку
+templates
+	blog
+            blogs.html
+
+в blogs.html прописываем и наполним данными
+{% extends 'skills/base.html' %}
+{% block content %}
+{% endblock %}
+
+перезапустить сервер
+в адресной строке сайта дописываем /blog
+
+теперь мы работаем со вторым нашим приложением blog и надо настроить что бы данные попадали в БД
+зайдем в models и создадим класс блог создающий таблицу в БД
+
+сначало в админ панеле зарегистрируем модель а потом сделаем миграцию
+from  .models import Blog
+# что бы она была видна в админ панеле
+
+admin.site.register(Blog)
+
+но она небудет все равно видна пока мы не применим миграцию
+останавливаем сервер
+выполняем по очереди
+python manage.py makemigrations
+python manage.py migrate
+запускаем сервер
+в админ панеле добавилось приложение Blog
+добавим новый контент из текстового документа + дата
+Вёрстка на HTML5
+проверим в таблице блог_блог БД появились ли новые таблицы
+теперь выведем новые записи на blogs.html страницу
+
+view запросит данные с Model и передаст в Template
+во view импортируем
+from .models import Blog
+и дописываем класс блог
+
+переходим в blogs.html и создадим цикл
+
+{% for blog in blogs %}
+    <div class="element"></div>
+
+{% endfor %}
+
+допишем в классе блог метод __str__ для читабельного отображения наших блогов-статей
+далее то же сделаем в скил модел
+
+досоздадим еще 3 блог контента
+    blogs = Blog.objects.order_by('-date')  # сортируем блоги по дате создания
+
+
+сделаем что бы не полностью статья показывалась а лишь начало
+в блогюрлс  добавим путь
+
+создадим функцию detail в блоке  views
+так же создадим details.html в blog
+ в нем создадим
+{% extends 'skills/base.html' %}
+{% block content %}
+{% endblock %}
+
+добавим во виев
+ get_object_or_404
+
+теперь свяжем страницу blog с отдельными страницами
+сделаем заголовки ссылками что бы они открывались отдельными страницами,добавим тег а
+% for blog in blogs %}
+    <div class="element">
+        <h2 class="top"><a href="{% url 'detail' blog.id %}">{{ blog.title }}</a>
+
+что бы укоротить информацию на странице и что бы избавится от тегов в blogs.html
+truncatechars:360
+striptags
+изменим шаблон даты вывода
+date:'d.m.Y'
+
+изменим страницу, выведем полное описание статьи /blog/1 когда нажимаем на ссылку,тут же избавимся от тегов
+details.html
+
+<h1>{{ blog.title }}</h1>
+<h2>--{{ blog.date }}--</h2>
+{{ blog.description|safe }}
+
+поменяем язык написания месяца , найдем папку
+personal_portfolio.settings
+LANGUAGE_CODE = 'ru-Ru'
+так же в админ панеле часть текста перевелась на русский язык
+
+в details.html установим фильтр что бы устранить букву г.
+<h2>--{{ blog.date:'j E Y' }}--</h2>
+
+вернемся в blogs.html и добавим количество постов
+<h2 class="count">Постов: {{ blogs.count}}</h2>
+
+допишем стили css
+.top
+.top a
+.detail
+.count
+.blog_text
+
+соединим два наших приложения blog и skills что бы мы могли переходить с одного на другое,создадим меню
+наши приложения наследуются от этого файла и в нем добавим меню
+second/personal_portfolio/skills/templates/skills/base.html
+<div class="menu">
+    <div class="wrap">
+        <div class="logo">
+
+сделаем ссылки кликабельными по ним будем возвращаться на главную страницу
+Главная
+Блог
+возьмем переменные из
+
+personal_portfolio/urls.py
+{% url 'index' %}
+
+blog/urls.py
+{% url 'blogs' %}
+
+добавим картинки из C:\Users\blend\Desktop\FW\FW_3\images с логотипом в папку
+skills/static/skills
+так же переносим resume.pdf из корня папки FW3
+
+теперь добавим картинку на страницу
+<a href="{% url 'index' %}"><img src="{% static 'skills/logo.png' %}" alt=""></a>
+
+выведем пдф документ в пункты меню и сделаем что бы он открывался в новой вкладке
+ <li><a href="{% static 'skills/resume.pdf' %}" target="_blank">Резюме</a></li>
+
+теперь добавим стили css к меню
+.menu
+.menu .wrap
+.menu a
+.menu ul
+.menu li
+
+вернемся на страницу и добавим картику вкладки страницы
+skills/templates/skills/base.html
+<link rel="icon" type="image/x/icon" href="{% static 'skills/favicon.ico' %}">
+
+
+*************************************************************************
+cd ../..
+
+3  Проект сделаем сайт- список задач с регистрацией и авторизацией пользователей,у каждого пользователя будет список задач он их сможет удалять создавать и редактировать
+1 создаем и заходим в него third вручную
+
+2 создаем проект
+PS C:\Django\third> django-admin startproject todos
+3 переходим в todos и создаем приложение todo
+PS C:\Django\third\todos> python manage.py startapp todo
+
+4 регистрируем приложение в и меняем язык
+third/todos/todos/settings.py
+'todo.apps.TodoConfig'
+
+
+
+5 проведем миграцию,создадим админа и запустим сервер
+PS C:\Django1\third\todos> python manage.py migrate
+PS C:\Django1\third\todos> python manage.py createsuperuser
+PS C:\Django1\third\todos> python manage.py runserver
+
+6 зашли в админку и проверили что сайт открывается
+пропишем пути которые у нас будут и проведем импорт
+from todo import views
+third/todos/todos/urls.py
+  # Авторизация
+    path('signup/', views.signupuser, name="signupuser"),
+
+    # Вывод информации
+    path('current/', views.currenttodos,name="currenttodos")
+
+7 создадим функции в папке
+third/todos/todo/views.py
+def signupuser(request):
+    return render(request, 'todo/signupuser.html')
+def currenttodos(request):
+    return render(request, 'todo/currenttodos.html')
+
+8 создадим
+third/todos/todo/templates/todo
+third/todos/todo/templates/todo/signupuser.html
+third/todos/todo/templates/todo/currenttodos.html
+third/todos/todo/templates/todo/base.html
+
+9 в third/todos/todo/templates/base.html напишем
+<div class="content">
+    <div class="wrap">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
+10 в third/todos/todo/templates/currenttodos.html
+third/todos/todo/templates/signupuser.html
+будем наследоваться от нашего базового шаблона
+
+11 в third/todos/todo/templates/currenttodos.html
+{% extends 'todo/base.html' %}
+{% block content %}
+<h1>Задачи:</h1>
+{% endblock %}
+
+12 в third/todos/todo/templates/signupuser.html
+{% extends 'todo/base.html' %}
+{% block content %}
+<h1>Регистрация:</h1>
+{% endblock %}
+
+13 добавим регистрацию пользователя
+в third/todos/todo/views.py добавляем ключ форм и импорт
+from django.contrib.auth.forms import UserCreationForm
+{'form': UserCreationForm}
+
+14 вставляем ключ в third/todos/todo/templates/signupuser.html
+{{ form.as_p }}
+
+на сайте нам надо зайти что бы проверить что получилось по адресу /signup после главной страницы
+и увидим форму регистрации
+
+отправку данных делаем методом пост в third/todos/todo/templates/signupuser.html
+<form method="post" class="register">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn">Зарегистрироваться</button>
+</form>
+
+теперь форма есть но она не куда не отправляется
+
+в third/todos/todo/views.py импортируем
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.db import IntegrityError
+далее допишем функцию signupuser
+
+def signupuser(request):
+    if request.method == "GET":
+        return render(request, 'todo/signupuser.html',{'form': UserCreationForm()})
+    else:
+        if request.POST['password1'] == request.POST['password2']:
+            try:
+                user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
+                user.save()
+                login(request, user)
+                return redirect('currenttodos')
+            except IntegrityError:
+                return render(request, 'todo/signupuser.html',
+                              {'form': UserCreationForm(), 'error': "Такое имя пользователя уже существует"})
+        else:
+            return render(request, 'todo/signupuser.html',{'form': UserCreationForm(), 'error': "Пароли не совпадают"})
+
+что бы видеть вывод ошибки передадим ключ error в todo/templates/todo/signupuser.html
+<h3>{{ error }}</h3>
+
+теперь зарегистрируем пользователя с паролем и посмотрим в БД что он появился и нас при это переносит на вторую нашу страницу currenttodos
+
+зайдем в админку - пользователи у и увидим наших пользователей
+
+так же проверим на ввод одинаковых имен в форме регистрации должно написаться на странице
+Такое имя пользователя уже существует
+
+------------------------------------------------------------------------------
+добавим пункты меня для зарегестрированых пользователей,это кнопки выйти или войти
+в third/todos/todo/templates/todo/base.html
+сначало проверим авторизирован пользователь или нет
+<div class="menu">
+    <div class="class">
+        <ul>
+            {% if user.is_authenticated %}
+                <li class="logo">Пользователь: {{user.username}}</li>
+                <li><a href="{% url 'currenttodos' %}">Актуальные</a></li>
+                <li><a href="">Выйти</a></li>
+            {% else %}
+                <li><a href="{% url 'signupuser' %}">Зарегистрироваться</a></li>
+                <li><a href="">Войти</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+выйдем из админки там должно написаться не афторизирован
+подключим стили css в third/todos/todo/templates/todo/base.html
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+создаем папки third/todos/todo/static/css/style.css
+открываем вижуастудиокод и открывем там наш проект
+пишем стили
+body{
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.wrap{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 30px;
+    box-sizing: border-box;
+}
+
+.menu{
+    background: #003366;
+    box-shadow: 0 2px 12px 2px #003366;
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+}
+
+.menu ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+}
+
+.menu .logo{
+    margin-right: 30px;
+    color: #FFF;
+}
+
+.menu a{
+    color: #FFF;
+}
+
+a{
+    text-decoration: none;
+}
+
+заходим в админку и перезагружаем нашу странцу и видим что стили применились
+
+оживим кнопку выйти
+в third/todos/todos/urls.py добавим пути
+path('logout/', views.logoutuser, name="logoutuser"),
+path('', views.home, name="home"),
+
+в third/todos/todo/views.py напишем функции и добавим импорт
+from django.contrib.auth import login, logout
+def home(request):
+    return render(request, 'todo/home.html')
+
+
+def logoutuser(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect('home')
+
+далее создадим third/todos/todo/templates/todo/home.html
+и заполним ее
+{% extends 'todo/base.html' %}
+{% block content %}
+<div class="center">
+    <h1>Система для обслуживания клиентов</h1>
+    <p>Развивайте свой бизнес с помощью продвинутой, но простой
+        в использовании платформы Upservice</p>
+    <h2>Для чего нужен Upservice</h2>
+    <p>Upservice – это платформа для контроля и управления вашим
+        бизнесом.</p>
+    <p>Помогает находить слабые стороны в работе сотрудников и
+        улучшать уровень обслуживания клиентов.</p>
+</div>
+{% endblock %}
+
+
+
+так как в функции метод пост то в third/todos/todo/templates/todo/base.html
+на кнопке выйти уберем тег а  и заменим на форм
+                <li>
+                    <form action="{% url 'logoutuser' %}" method="post">
+                        {% csrf_token %}
+                        <button class="top">Выйти</button>
+                    </form>
+                </li>
+
+оживим кнопку войти добавим путь в third/todos/todos/urls.py
+path('login/', views.loginuser, name="loginuser"),
+
+далее в third/todos/todo/views.py добавим импорт
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
+и создадим функцию
+def loginuser(request):  # авторизация
+    if request.method == "GET":
+        return render(request, 'todo/loginuser.html', {'form': AuthenticationForm()})
+
+
+создаем html страницу
+third/todos/todo/templates/todo/loginuser.html
+и наполним ее
+<h1>Авторизация</h1>
+<h2>{{ error }}</h2>
+
+<form action="post" class="bg">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="center">
+        <button class="btn">Авторизация</button>
+    </div>
+</form>
+
+но сначало вернемся на third/todos/todo/templates/todo/base.html и добавим
+<li><a href="{% url 'loginuser' %}">Войти</a></li>
+
+допишем функцию в third/todos/todo/views.py
+    else:
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'todo/loginuser.html',
+                          {'form': AuthenticationForm(), 'error': 'Неверные данные для входа'})
+        else:
+            login(request, user)
+            return redirect('currenttodos')
+
+
+********** вторая часть нашего сайта разобраться как ставить задачи,удалять или редактировать или отправлять куда то
+
+в third/todos/todo/models.py импортируем
+from django.contrib.auth.models import User
+создадим свою БД что бы привязать задачи к каждому пользователю
+
+class Todo(models.Model):
+    title = models.CharField(max_length=100)
+    memo = models.TextField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    date_completed = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+варианты для ознакомления
+models.CASCADE - если пользователь будет удален, то все его задачи удаляться
+models.PROTECT - запрещает удалять пользователя пока у него есть задачи
+models.SET_NULL - задачи останутся в БД даже при удалении пользователя но значение в полу задачи измениться на None
+models.SET_DEFAULT - задачи останутся в БД даже при удалении пользователя но значение в полу задачи измениться на значение заданное по умолчанию
+
+далее останавливаем сервер и производим миграции
+PS C:\Django\third\todos> python manage.py makemigrations
+PS C:\Django\third\todos> python manage.py migrate
+
+теперь зарегистрируем наше приложение Todo в third/todos/todo/admin.py что бы видеть ее в админ панеле
+from .models import Todo
+class TodoAdmin(admin.ModelAdmin):
+    readonly_fields = ('created', )
+admin.site.register(Todo, TodoAdmin)
+
+далее добавим путь создания задачи third/todos/todos/urls.py
+ path('create/', views.createtodo, name="createtodo"),
+
+и соответственно во third/todos/todo/views.py создадим функцию
+def createtodo(request):
+    if request.method == "GET":
+        return render(request, 'todo/createtodo.html')
+
+создадим далее страницу third/todos/todo/templates/todo/createtodo.html
+{% extends 'todo/base.html' %}
+
+{% block content %}
+
+<h1>Создание задачи</h1>
+
+{% endblock %}
+
+далее в third/todos/todo/templates/todo/base.html добавим строчку
+<li><a href="{% url 'createtodo' %}">Создать</a></li>
+
+далее создадим документ
+third/todos/todo/forms.py
+и заполним его
+from django.forms import ModelForm
+from .models import Todo
+
+
+class TodoForm(ModelForm):
+    class Meta:
+        model = Todo
+        fields = ['title', 'memo', 'important']
+
+далее идем и добавляем параметр в third/todos/todo/views.py
+from .forms import TodoForm
+
+return render(request, 'todo/createtodo.html', {'form': TodoForm()})
+
+теперь в third/todos/todo/templates/todo/createtodo.html
+добавим
+<h2>{{ error }}</h2>
+
+<form method="post" class="bg"></form>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="center">
+        <button class="btn">Создать</button>
+    </div>
+{% endblock %}
+
+
+в third/todos/todo/views.py
+добавим
+    else:
+        try:
+            form = TodoForm(request.POST)
+            new_todo = form.save(commit=False)
+            new_todo.user = request.user
+            new_todo.save()
+            return redirect('currenttodos')
+        except ValueError:
+            return render(request, 'todo/createtodo.html', {'form': TodoForm(), 'error': 'Переданы неверные данные. Попробуйте еще раз'})
+
+
+third/todos/todo/views.py
+def currenttodos(request):
+    todos = Todo.objects.filter(user=request.user, date_completed__isnull=True)
+    return render(request, 'todo/currenttodos.html', {'todos': todos})
+
+далее в third/todos/todo/templates/todo/currenttodos.html
+<ul>
+    {% for todo in todos %}
+    <li>
+        {% if todo.important %}
+            <b>{{ todo.title }}</b>
+        {% else %}
+            {{ todo.title }}
+        {% endif %}
+
+        {% if todo.memo %}
+        - {{ todo.memo }}
+    </li>
+    {% endfor %}
+</ul>
+
+
+third/todos/todos/urls.py
+path('todo/<int:todo_pk>/', views.viewtodo, name="viewtodo"),
+
+
+third/todos/todo/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+def viewtodo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk)
+    return render(request,'todo/viewtodo.html', {'todo': todo})
+
+создаем документ
+third/todos/todo/templates/todo/viewtodo.html
+
+third/todos/todo/templates/todo/currenttodos.html
+вложим все в тег а
+
+добавим стили
+.content li{
+    box-shadow: 0 2px 8px 2px #003366;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.center a{
+    color: #000;
+    display: block;
+    padding: 20px;
+}
+
+third/todos/todo/views.py
+    form = TodoForm()
+    return render(request,'todo/viewtodo.html', {'todo': todo, 'form': form})
+
+third/todos/todo/templates/todo/viewtodo.html
+выведем результат
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="dtn">Сохранить</button>
+</form>
+
+third/todos/todo/views.py
+def viewtodo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk)
+    if request.method == "GET":
+        form = TodoForm(instance=todo)
+        return render(request,'todo/viewtodo.html', {'todo': todo, 'form': form})
+    else:
+        try:
+            form = TodoForm(request.POST, instance=todo)
+            form.save()
+            return redirect('currenttodos')
+        except ValueError:
+            return render(request, 'todo/viewtodo.html', {'todo': todo, 'form': form, 'error': 'Неверные данные'})
+
+добавим кнопку выполненых задач
+third/todos/todos/urls.py
+path('todo/<int:todo_pk>/complete', views.completetodo, name="completetodo"),
+
+third/todos/todo/views.py допишем функцию
+from django.utils import timezone
+def completetodo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == "POST":
+        todo.date_completed = timezone.now()
+        todo.save()
+        return redirect('currenttodos')
+
+
+добавим форму
+third/todos/todo/templates/todo/viewtodo.html
+<form action="{% url 'completetodo' todo.id %} " method="post">
+    {% csrf_token %}
+    <button class="btn">Выполнено</button>
+</form>
+
+1,13 мин закончен проект
+*************************************************************
+cd ../..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

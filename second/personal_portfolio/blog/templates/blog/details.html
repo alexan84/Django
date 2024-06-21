@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'skills/base.html' %}
+
+
+{% block content %}
+<!--из функции detail из виев, это содержимое страницы /blog/1
+тут находятся заголовок,дата и текст статьи,так же удаляются теги(/safe),установим фильтр что бы устранить букву г.-->
+
+<div class="detail">
+    <h1>{{ blog.title }}</h1>
+    <h2>--{{ blog.date|date:'j E Y' }}--</h2>
+    {{ blog.description|safe }}
+</div>
+{% endblock %}

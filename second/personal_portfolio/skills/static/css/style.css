@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/*  */
+/* цвет фона страницы */
+body{
+    background: #CCCCFF;
+    font-family: "Roboto", sans-serif;
+    /* удалим стандартные отступы которые есть в html разметке */
+    padding: 0;
+    margin: 0;
+}
+
+/*весь наш блок в этом классе - зафиксируем ширину сайта,выравниваем его по центру если ширина больше чем 1200, что бы текст не прилипал к границам окна браузера,и что бы не расширялась ширина нашего блока*/
+.wrap{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* выстроим блоки сайта в одну строку,возможность переноса на другую строчку,расширим элементы по всей ширине экрана */
+.block{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-bottom: 60px;
+}
+
+/* фоновый цвет, параметры бордюра, отступы (верх низ и лево право,)*/
+.element, .count{
+    background: lightyellow;
+    border: 6px solid #FFF;
+    margin: 20px 0;
+}
+
+/* обратимся ко всем картинкам в класса блок - максимальная ширина, */
+.block img{
+    max-width: 360px;
+}
+
+/* ширина, */
+.text{
+    width: 360px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* */
+.content h1{
+    text-align: center;
+    margin: 20px;
+}
+
+/* заголовки в классе картинки  */
+.img + h2, .text h2{
+    text-align: center;
+    margin-bottom: 60px;
+    font-size: 30px;
+}
+
+/*   */
+.img img{
+    border: 6px solid #fff;    
+}
+
+/* выравним заголовки по центру,верх низ 60,лево 0 и низ 40 */
+.img{
+    text-align: center;
+    margin: 60px 0 40px;
+}
+
+/* фон */
+.top{
+    background: #663366;
+    margin: 0;
+}
+
+/*  цвет текста, отсупы текста от краев и преобразуем линейный элемент в блочный */
+.top a{
+    color: #FFF;
+    text-decoration: none;
+    padding: 20px;
+    display: block;
+}
+
+.detail{
+    background: #FFF;
+    padding: 20px 20px 60px;
+    box-sizing: border-box;
+}
+
+.count{
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.blog_text{
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.menu{
+    background: lightyellow;
+    padding: 10px;
+    border-bottom: 6px solid #FFF;
+}
+
+/*  возможность переноса на другую строчку, растянем элементы в разные строны,вертикальное выравнивание*/
+.menu .wrap{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* цвет,уберем подчеркивание  */
+.menu a{
+    color: #663366;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* элементы в одну строчку,уберем маркиры списка  */
+.menu ul{
+    display: flex;
+    list-style: none;
+    font-size: 24px;
+}
+
+/*   */
+/*  что бы слова отлипли друг от друга */
+.menu li{
+    margin-left: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
